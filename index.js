@@ -34,39 +34,17 @@ module.exports = function(options, callback) {
 
 
     connectPendant ()
-    // // [Function] check for controller to conect (show up in devices), then start services. Kill services on disconect.
-    // setInterval(checkController, 3*1000);
-    // function checkController(socket, controller) {
-    //     //console.log('Checkign Controller Status');
-
-    //     // Get HID Devices
-    //     var devices = HID.devices();
-
-    //     // Find DualShock 3 Controller HID
-    //     devices.forEach(function(device) {
-    //         // List Devices
-    //         //console.log(device.vendorId + " | " + device.productId);
-
-    //         // Detect Cordless RumblePad2
-    //         if (!pendant_started && (device.vendorId == 1133 && device.productId == 49689)) {
-    //             console.log("Gamepad detected");
-
-    //             // Start Socket Connection & Controller Conection
-    //             pendant_started = true;
-    //             connectPendant();
-    //         }
-    //     });
-    // }
-
     // ###########################################################################
     // Start Socket Connection & Controller Conection
     function connectPendant () {
         const cncrc = path.resolve(getUserHome(), '.cncrc');
-        var config;
+        console.log(cncrc);
+	var config;
         try {
             config = JSON.parse(fs.readFileSync(cncrc, 'utf8'));
         } catch (err) {
-            console.error(err);
+            console.log('Failed with config file')
+	    console.error(err);
             process.exit(1);
         }
         if (!options.secret) {
@@ -82,7 +60,7 @@ module.exports = function(options, callback) {
 
         socket = io.connect('ws://' + options.socketAddress + ':' + options.socketPort, {
             'query': 'token=' + token
-        });
+	});
 
         socket.on('connect', () => {
             console.log('Connected to ' + url);

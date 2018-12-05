@@ -30,12 +30,9 @@
   "homepage": "https://github.com/cncjs/cncjs-pendant-gamepad#readme",
   "dependencies": {
     "commander": "^2.9.0",
-    "inquirer": "^3.0.1",
     "jsonwebtoken": "^7.2.1",
     "lodash.get": "^4.4.2",
     "node-hid": "^0.7.4",
-    "serialport": "^4.0.7",
-    "socket.io-client": "^1.7.2",
-    "vorpal": "^1.11.4"
+    "socket.io-client": "^1.7.2"
   }
 }
