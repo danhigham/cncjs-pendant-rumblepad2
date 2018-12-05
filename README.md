@@ -1,16 +1,7 @@
-# cncjs-pendant-boilerplate
-A bare minimum example to develop a cncjs pendant.
+# cncjs-pendant-rumblepad2
+Remote pendant fo cnc-js
 
-![image](https://cloud.githubusercontent.com/assets/447801/22881387/2b60de08-f221-11e6-9372-288e118788a9.png)
 
-## Installation
-```
-npm install
-```
-
-## Usage
-Run `bin/cncjs-pendant-boilerplate` to start the interactive client. Pass --help to `cncjs-pendant-boilerplate` for more options.
-
-```
-bin/cncjs-pendant-boilerplate --help
-```
+I've added
+`SUBSYSTEMS=="usb", ATTRS{product}=="Logitech Cordless RumblePad 2", GROUP="plugdev", MODE:="0666"`
+to "/etc/udev/rules.d/10-local.rules"

@@ -1,13 +1,13 @@
 {
-  "name": "cncjs-pendant-boilerplate",
-  "version": "0.1.0",
-  "description": "A bare minimum example to develop a cncjs pendant.",
+  "name": "cncjs-pendant-gamepad",
+  "version": "0.0.0",
+  "description": "USB gamepad cncjs pendant.",
   "main": "./index.js",
   "engines": {
     "node": ">=4"
   },
   "bin": {
-    "cncjs-pendant-boilerplate": "./bin/cncjs-pendant-boilerplate"
+    "cncjs-pendant-gamepad": "./bin/cncjs-pendant-gamepad"
   },
   "preferGlobal": true,
   "scripts": {
@@ -15,19 +15,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cncjs/cncjs-pendant-boilerplate.git"
+    "url": "git+https://github.com/grindel/cncjs-pendant-gamepad.git"
   },
   "keywords": [
     "cncjs",
     "pendant",
-    "boilerplate"
+    "gamepad"
   ],
-  "author": "Cheton Wu <cheton@gmail.com>",
+  "author": "Grindel <grindelman@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cncjs/cncjs-pendant-boilerplate/issues"
+    "url": "https://github.com/cncjs/cncjs-pendant-gamepad/issues"
   },
-  "homepage": "https://github.com/cncjs/cncjs-pendant-boilerplate#readme",
+  "homepage": "https://github.com/cncjs/cncjs-pendant-gamepad#readme",
   "dependencies": {
     "commander": "^2.9.0",
     "inquirer": "^3.0.1",
