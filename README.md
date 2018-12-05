@@ -1,5 +1,5 @@
 # cncjs-pendant-rumblepad2
-Remote pendant fo cnc-js
+Remote pendant for cnc-js
 
 
 I've added

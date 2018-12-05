@@ -179,10 +179,10 @@ module.exports = function(options, callback) {
 
 
         // HACK
-        controller.on('b9:pressed', () => {
-            if(!l1 & !l2)
-                process.exit(1);
-        });
+        // controller.on('b9:pressed', () => {
+        //     if(!l1 & !l2)
+        //         process.exit(1);
+        // });
 
         // Reset
         controller.on('b9:pressed', function(data) {

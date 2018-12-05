@@ -1,9 +1,5 @@
 #!/usr/bin/env node
 
-var program = require('commander');
-var serialport = require('serialport');
-var inquirer = require('inquirer');
-var vorpal = require('vorpal')();
 var pkg = require('../package.json');
 var serverMain = require('../index');
 var options = {};
@@ -54,24 +50,3 @@ if (options.port) {
     createServer(options);
     return;
 }
-
-serialport.list(function(err, ports) {
-    if (err) {
-        console.error(err);
-        process.exit(1);
-    }
-    const choices = ports.map(function(port) {
-        return port.comName;
-    });
-
-    inquirer.prompt([{
-        type: 'list',
-        name: 'port',
-        message: 'Specify which port you want to use?',
-        choices: choices
-    }]).then(function(answers) {
-        options.port = answers.port;
-
-        createServer(options);
-    });
-});
