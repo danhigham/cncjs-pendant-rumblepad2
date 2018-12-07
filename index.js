@@ -171,8 +171,6 @@ module.exports = function(options, callback) {
                 socket.emit('command', options.port, 'gcode', warmUpCommand.command)
         });
 
-        var psx = false;
-
         // Start
         controller.on('b1:pressed', function(data) {
             if (!r1 && !l1 && !r2) {
@@ -276,6 +274,49 @@ module.exports = function(options, callback) {
         var move_x_axis = 0;
         var move_y_axis = 0;
         var move_z_axis = 0;
+            
+        controller.on('dpad', function(data) {
+            switch(data){
+                case 0:
+                    move_x_axis = 1;
+                    break;
+                case 1:
+                    move_x_axis = 1;
+                    move_y_axis = -1;
+                    break;
+                case 2:
+                    move_y_axis = -1;
+                    break;
+                case 3:
+                    move_y_axis = -1;
+                    move_x_axis = -1;
+                    break;
+                case 4:
+                    move_x_axis = -1;
+                    break
+                case 5:
+                    move_y_axis = 1
+                    move_x_axis = -1;
+                    break;
+                case 6:
+                    move_y_axis = 1;
+                    break;
+                case 7:
+                    move_y_axis = 1;
+                    move_x_axis = 1;
+                    break;
+                default:
+                    move_x_axis = 0;
+                    move_y_axis = 0;
+            }
+
+            if(!jogging){
+                jogging = true;
+                jog()
+            }else{
+                stopJog(true);
+            }
+        });
         
         controller.on('left:moved', function(data) {
             var hysteresis = 0.03;
@@ -295,23 +336,22 @@ module.exports = function(options, callback) {
             }else{
                 move_y_axis = 0;
             }
-            console.log('lm:'+jogging)
+        
             if(!jogging){
                 jogging = true;
                 jog()
             }
 
         });
-
+        
         socket.on('serialport:read', function(data) {
             if(jogging){
                 jog();
             }
         });
 
-        // setInterval(jog, 20);
         function jog() {
-            console.log('JOG');
+            console.log('JOG')
             // Check if Axis Needs Moving
             if (move_x_axis != 0 || move_y_axis != 0) {
                 
@@ -333,13 +373,14 @@ module.exports = function(options, callback) {
                 var s_x = round(move_x_axis * s/c,2)
                 var s_y = round(move_y_axis * s/c,2)
 
-                console.log('m_x:'+move_x_axis);
-                console.log('m_y:'+move_y_axis);
-                console.log('v:'+v);
-                console.log('dt:'+dt);
-                console.log('s:'+s);
-                console.log('s_x:'+s_x);
-                console.log('s_y:'+s_y);
+                // Debugging this strange Math
+                // console.log('m_x:'+move_x_axis);
+                // console.log('m_y:'+move_y_axis);
+                // console.log('v:'+v);
+                // console.log('dt:'+dt);
+                // console.log('s:'+s);
+                // console.log('s_x:'+s_x);
+                // console.log('s_y:'+s_y);
                 
 
                 socket.emit('command', options.port, 'gcode', '$J=G91 X' + s_x + " Y" + s_y + ' F' + v);
@@ -355,15 +396,18 @@ module.exports = function(options, callback) {
                     v = 100;
                     s = move_z_axis * 0.1 
                 }
-                console.log('gcode', '$J=G91 Z' + s + ' F'+v)
                 socket.emit('command', options.port, 'gcode', '$J=G91 Z' + s + ' F'+v);
                 
                 jogging = true;
             }else{
-                console.log('jog cancel')
-                socket.emit('command', options.port, 'gcode', '\x85');
-                jogging = false;
+                stopJog();
             }
+        }
+
+        function stopJog(j){
+            // console.log('Stop JOG')
+            socket.emit('command', options.port, 'gcode', '\x85');
+            jogging = j;
         }
 
         function round (value, decimals) {
