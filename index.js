@@ -38,13 +38,12 @@ module.exports = function(options, callback) {
     // Start Socket Connection & Controller Conection
     function connectPendant () {
         const cncrc = path.resolve(getUserHome(), '.cncrc');
-        console.log(cncrc);
 	var config;
         try {
             config = JSON.parse(fs.readFileSync(cncrc, 'utf8'));
         } catch (err) {
-            console.log('Failed with config file')
-	    console.error(err);
+            console.error('Failed with config file')
+	        console.error(err);
             process.exit(1);
         }
         if (!options.secret) {
@@ -60,7 +59,7 @@ module.exports = function(options, callback) {
 
         socket = io.connect('ws://' + options.socketAddress + ':' + options.socketPort, {
             'query': 'token=' + token
-	});
+        });
 
         socket.on('connect', () => {
             console.log('Connected to ' + url);
@@ -154,13 +153,6 @@ module.exports = function(options, callback) {
             r2 = false;
             //console.log(data + '|' + r2);
         });
-
-
-        // HACK
-        // controller.on('b9:pressed', () => {
-        //     if(!l1 & !l2)
-        //         process.exit(1);
-        // });
 
         // Reset
         controller.on('b9:pressed', function(data) {

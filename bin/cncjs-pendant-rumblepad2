@@ -7,7 +7,6 @@ var options = {};
 program
     .version(pkg.version)
     .usage('-s <secret> -p <port> [options]')
-    .option('-l, --list', 'list available ports then exit')
     .option('-s, --secret', 'the secret key stored in the ~/.cncrc file')
     .option('-p, --port <port>', 'path or name of serial port')
     .option('-b, --baudrate <baudrate>', 'baud rate (default: 115200)', 115200)
@@ -28,19 +27,6 @@ var options = {
     accessTokenLifetime: program.accessTokenLifetime,
     pendantControllerPath: program.pendantControllerPath
 };
-
-if (options.list) {
-    serialport.list(function(err, ports) {
-        if (err) {
-            console.error(err);
-            process.exit(1);
-        }
-        ports.forEach(function(port) {
-            console.log(port.comName);
-        });
-    });
-    return;
-}
 
 var createServer = function(options) {
     serverMain(options, function(err, socket) {});
