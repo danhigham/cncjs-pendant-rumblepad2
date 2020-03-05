@@ -110,142 +110,133 @@ module.exports = function(options, callback) {
         
         controller = new GenericPad();
 
-        // SHIFTS
-        // L1
-        var l1 = false;
-        controller.on('l1:pressed', function(data) {
-            l1 = true;
-        });
-        controller.on('l1:released', function(data) {
-            l1 = false;
-            //console.log(data + '|' + l1);
-        });
+        
+        // // SHIFTS
+        // // L1
+        // var l1 = false;
+        // controller.on('left:pressed', function(data) {
+        //     l1 = true;
+        // });
+        // controller.on('left:released', function(data) {
+        //     l1 = false;
+        //     //console.log(data + '|' + l1);
+        // });
 
-        // R1
-        var r1 = false;
-        controller.on('r1:pressed', function(data) {
-            r1 = true;
-            //console.log(data + '|' + r1);
-        });
-        controller.on('r1:released', function(data) {
-            r1 = false;
-            //console.log(data + '|' + r1);
-        });
-
-
-        // Reset
-        controller.on('b9:pressed', function(data) {
-            if (l1) {
-                socket.emit('command', options.port, 'reset');
-            }
-        });
-
-        //Homing & Unlock & WarmUp
-        controller.on('b10:pressed', () => {
-            if(r1 & !r2)
-                socket.emit('command', options.port, 'unlock');
-            else if(!r2)
-                socket.emit('command', options.port, 'homing');
-            if(r1 & r2 & (typeof warmUpCommand != 'undefined'))
-                socket.emit('command', options.port, 'gcode', warmUpCommand.command)
-        });
-
-        // Start
-        controller.on('b1:pressed', function(data) {
-            if (!r1 && !l1 && !r2) {
-                socket.emit('command', options.port, 'gcode:start');
-                //console.log('cyclestart:' + data);
-            }
-        });
-
-        // Stop
-        controller.on('b3:pressed', function(data) {
-            if (!r1 && !l1) {
-                socket.emit('command', options.port, 'gcode', 'M30');
-                //console.log('feedhold:' + data);
-            }
-        });
+        // // R1
+        // var r1 = false;
+        // controller.on('right:pressed', function(data) {
+        //     r1 = true;
+        //     //console.log(data + '|' + r1);
+        // });
+        // controller.on('right:released', function(data) {
+        //     r1 = false;
+        //     //console.log(data + '|' + r1);
+        // });
 
 
-        // Pause
-        controller.on('b2:pressed', function(data) {
-            if (!r1 && !l1) {
-                socket.emit('command', options.port, 'gcode:pause');
-                //console.log('pause:' + data);
-            }
-        });
+        // // Reset
+        // controller.on('b9:pressed', function(data) {
+        //     if (l1) {
+        //         socket.emit('command', options.port, 'reset');
+        //     }
+        // });
 
-        // Resume
-        controller.on('b4:pressed', function(data) {
-            if (!r1 && !l1) {
-                socket.emit('command', options.port, 'gcode:resume');
-                //console.log('unlock:' + data);
-            }
-        });
+        // // Start
+        // controller.on('start:pressed', function(data) {
+        //     if (!r1 && !l1 && !r2) {
+        //         socket.emit('command', options.port, 'gcode:start');
+        //         //console.log('cyclestart:' + data);
+        //     }
+        // });
 
-        // Sleep
-        controller.on('b9:pressed', function(data) {
-            if (l2) {
-                socket.emit('command', options.port, 'sleep');
-            }
-        });
-
-
-        // Raise Z
-        controller.on('b4:pressed', function(data) {
-            if (r1) {    
-                move_z_axis = 1;
-                jog();
-            }
-        });
-
-        controller.on('b4:released', function(data) {
-            move_z_axis = 0;
-        });
-
-        controller.on('b2:pressed', function(data) {
-            if (r1) {
-                move_z_axis = -1;
-                jog();            
-            }
-        });
-
-        controller.on('b2:released', function(data) {
-            move_z_axis = 0;
-        });
-
-        // Zero out work offsets
-        controller.on('right:pressed', function(data) {
-            if(r1){
-                socket.emit('command', options.port, 'gcode', 'G10 L20 P1 Z0');
-                controller.feedback(200,200);
-            }else{
-                socket.emit('command', options.port, 'gcode', 'G10 L20 P1 X0');
-                socket.emit('command', options.port, 'gcode', 'G10 L20 P1 Y0');
-                controller.feedback(200,200);
-            }
-        });
-
-        // Goto zeros
-        controller.on('left:pressed', function(data) {
-            if(r1)
-                socket.emit('command', options.port, 'gcode', 'G0 Z0');
-            else
-                socket.emit('command', options.port, 'gcode', 'G0 X0 Y0 F5000');
-        });
+        // // Stop
+        // controller.on('b3:pressed', function(data) {
+        //     if (!r1 && !l1) {
+        //         socket.emit('command', options.port, 'gcode', 'M30');
+        //         //console.log('feedhold:' + data);
+        //     }
+        // });
 
 
-        // Z-Probe
-        controller.on('b3:pressed', function(){
-            if(r1 && (typeof zProbeCommand != 'undefined'))
-                socket.emit('command', options.port, 'gcode', zProbeCommand.command)
-        })
+        // // Pause
+        // controller.on('b2:pressed', function(data) {
+        //     if (!r1 && !l1) {
+        //         socket.emit('command', options.port, 'gcode:pause');
+        //         //console.log('pause:' + data);
+        //     }
+        // });
 
-        //Boundary macro
-        controller.on('b1:pressed', function(){
-            if(r2 & (typeof boundaryMacro != 'undefined'))
-                socket.emit('command', options.port, 'macro:run', boundaryMacro.id)
-        })
+        // // Resume
+        // controller.on('b4:pressed', function(data) {
+        //     if (!r1 && !l1) {
+        //         socket.emit('command', options.port, 'gcode:resume');
+        //         //console.log('unlock:' + data);
+        //     }
+        // });
+
+        // // Sleep
+        // controller.on('b9:pressed', function(data) {
+        //     if (l2) {
+        //         socket.emit('command', options.port, 'sleep');
+        //     }
+        // });
+
+
+        // // Raise Z
+        // controller.on('b4:pressed', function(data) {
+        //     if (r1) {    
+        //         move_z_axis = 1;
+        //         jog();
+        //     }
+        // });
+
+        // controller.on('b4:released', function(data) {
+        //     move_z_axis = 0;
+        // });
+
+        // controller.on('b2:pressed', function(data) {
+        //     if (r1) {
+        //         move_z_axis = -1;
+        //         jog();            
+        //     }
+        // });
+
+        // controller.on('b2:released', function(data) {
+        //     move_z_axis = 0;
+        // });
+
+        // // Zero out work offsets
+        // controller.on('right:pressed', function(data) {
+        //     if(r1){
+        //         socket.emit('command', options.port, 'gcode', 'G10 L20 P1 Z0');
+        //         controller.feedback(200,200);
+        //     }else{
+        //         socket.emit('command', options.port, 'gcode', 'G10 L20 P1 X0');
+        //         socket.emit('command', options.port, 'gcode', 'G10 L20 P1 Y0');
+        //         controller.feedback(200,200);
+        //     }
+        // });
+
+        // // Goto zeros
+        // controller.on('left:pressed', function(data) {
+        //     if(r1)
+        //         socket.emit('command', options.port, 'gcode', 'G0 Z0');
+        //     else
+        //         socket.emit('command', options.port, 'gcode', 'G0 X0 Y0 F5000');
+        // });
+
+
+        // // Z-Probe
+        // controller.on('b3:pressed', function(){
+        //     if(r1 && (typeof zProbeCommand != 'undefined'))
+        //         socket.emit('command', options.port, 'gcode', zProbeCommand.command)
+        // })
+
+        // //Boundary macro
+        // controller.on('b1:pressed', function(){
+        //     if(r2 & (typeof boundaryMacro != 'undefined'))
+        //         socket.emit('command', options.port, 'macro:run', boundaryMacro.id)
+        // })
 
         
         // ==[ JOGGING ]==
@@ -297,31 +288,31 @@ module.exports = function(options, callback) {
             }
         });
         
-        controller.on('left:moved', function(data) {
-            var hysteresis = 0.03;
-            var y = round((data.x-128)/128, 2)*-1;
-            var x = round((data.y-128)/128, 2)*-1;
+        // controller.on('left:moved', function(data) {
+        //     var hysteresis = 0.03;
+        //     var y = round((data.x-128)/128, 2)*-1;
+        //     var x = round((data.y-128)/128, 2)*-1;
 
-            var move = false;
+        //     var move = false;
 
-            if(Math.abs(x)>hysteresis){
-                move_x_axis = 1*x;    
-            }else {
-                move_x_axis = 0;
-            }
+        //     if(Math.abs(x)>hysteresis){
+        //         move_x_axis = 1*x;    
+        //     }else {
+        //         move_x_axis = 0;
+        //     }
 
-            if (Math.abs(y)>hysteresis){
-                move_y_axis = 1*y;
-            }else{
-                move_y_axis = 0;
-            }
+        //     if (Math.abs(y)>hysteresis){
+        //         move_y_axis = 1*y;
+        //     }else{
+        //         move_y_axis = 0;
+        //     }
         
-            if(!jogging){
-                jogging = true;
-                jog()
-            }
+        //     if(!jogging){
+        //         jogging = true;
+        //         jog()
+        //     }
 
-        });
+        // });
         
         socket.on('serialport:read', function(data) {
             if(jogging){
