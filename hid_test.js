@@ -1,6 +1,8 @@
 var HID = require('node-hid');
 var devices = HID.devices();
 
+console.log(devices)
+
 var device = new  HID.HID(devices[0].vendorId, devices[0].productId);
 // var device = new HID.HID( 3727, 8);
 
@@ -15,5 +17,7 @@ device.on("data", function(data) {
 		}
 		state += ':'
 	}
+
+	//console.log((data[3] << 8) + data[4])
 	console.log(state);
 });

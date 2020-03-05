@@ -50,6 +50,7 @@ class GenericGamepad extends EventEmitter {
 		if(currentState != this._state['dpad']){
 			this._state.dpad = currentState;
 			this.emit( 'dpad', currentState );
+			console.log(data);
 		} 
 
 

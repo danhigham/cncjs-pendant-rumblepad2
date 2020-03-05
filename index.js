@@ -29,7 +29,6 @@ module.exports = function(options, callback) {
     options.controllerType = get(options, 'controllerType', 'Grbl');
     options.accessTokenLifetime = get(options, 'accessTokenLifetime', '30d');
 
-
     var pendant_started = false;
 
 
@@ -50,12 +49,16 @@ module.exports = function(options, callback) {
             options.secret = config.secret;
         }
 
-        var warmUpCommand =  config.mdi.find(obj => { return obj.name == 'WarmUp'})
+	console.log(options)
+
+/*        var warmUpCommand =  config.mdi.find(obj => { return obj.name == 'WarmUp'})
         var zProbeCommand =  config.mdi.find(obj => { return obj.name == 'Z-Probe'})
         var boundaryMacro =  config.macros.find(obj => { return obj.name == 'boundary'})
-
+*/
         const token = generateAccessToken({ id: '', name: 'pendant' }, options.secret, options.accessTokenLifetime);
         const url = 'ws://' + options.socketAddress + ':' + options.socketPort + '?token=' + token;
+
+	console.log(url);
 
         socket = io.connect('ws://' + options.socketAddress + ':' + options.socketPort, {
             'query': 'token=' + token
