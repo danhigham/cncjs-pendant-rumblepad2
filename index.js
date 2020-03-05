@@ -5,7 +5,7 @@ const path = require('path');
 const io = require('socket.io-client');
 const jwt = require('jsonwebtoken');
 const get = require('lodash.get');
-const RumblePad2 = require(path.resolve( __dirname, "./cordlessRumlePad2.js" ));
+const GenericPad = require(path.resolve( __dirname, "./GenericGamepad.js" ));
 
 const generateAccessToken = function(payload, secret, expiration) {
     const token = jwt.sign(payload, secret, {
@@ -108,7 +108,7 @@ module.exports = function(options, callback) {
                 controller.feedback(255,200);
         });
         
-        controller = new RumblePad2();
+        controller = new GenericPad();
 
         // SHIFTS
         // L1
@@ -132,27 +132,6 @@ module.exports = function(options, callback) {
             //console.log(data + '|' + r1);
         });
 
-        // L2
-        var l2 = false;
-        controller.on('l2:pressed', function(data) {
-            l2 = true;
-            //console.log(data + '|' + l2);
-        });
-        controller.on('l2:released', function(data) {
-            l2 = false;
-            //console.log(data + '|' + l2);
-        });
-
-        // R2
-        var r2 = false;
-        controller.on('r2:pressed', function(data) {
-            r2 = true;
-            //console.log(data + '|' + r2);
-        });
-        controller.on('r2:released', function(data) {
-            r2 = false;
-            //console.log(data + '|' + r2);
-        });
 
         // Reset
         controller.on('b9:pressed', function(data) {
