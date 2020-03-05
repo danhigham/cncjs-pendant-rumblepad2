@@ -29,6 +29,7 @@ module.exports = function(options, callback) {
     options.controllerType = get(options, 'controllerType', 'Grbl');
     options.accessTokenLifetime = get(options, 'accessTokenLifetime', '30d');
 
+
     var pendant_started = false;
 
 
@@ -49,16 +50,14 @@ module.exports = function(options, callback) {
             options.secret = config.secret;
         }
 
-	console.log(options)
+        
 
-/*        var warmUpCommand =  config.mdi.find(obj => { return obj.name == 'WarmUp'})
+        var warmUpCommand =  config.mdi.find(obj => { return obj.name == 'WarmUp'})
         var zProbeCommand =  config.mdi.find(obj => { return obj.name == 'Z-Probe'})
         var boundaryMacro =  config.macros.find(obj => { return obj.name == 'boundary'})
-*/
+
         const token = generateAccessToken({ id: '', name: 'pendant' }, options.secret, options.accessTokenLifetime);
         const url = 'ws://' + options.socketAddress + ':' + options.socketPort + '?token=' + token;
-
-	console.log(url);
 
         socket = io.connect('ws://' + options.socketAddress + ':' + options.socketPort, {
             'query': 'token=' + token
@@ -250,31 +249,31 @@ module.exports = function(options, callback) {
             
         controller.on('dpad', function(data) {
             switch(data){
-                case 0:
+                case 65407:
                     move_x_axis = 1;
                     break;
-                case 1:
+                case 65535:
                     move_x_axis = 1;
                     move_y_axis = -1;
                     break;
-                case 2:
+                case 32767:
                     move_y_axis = -1;
                     break;
-                case 3:
+                case 255:
                     move_y_axis = -1;
                     move_x_axis = -1;
                     break;
-                case 4:
+                case 127:
                     move_x_axis = -1;
                     break
-                case 5:
+                case 0:
                     move_y_axis = 1
                     move_x_axis = -1;
                     break;
-                case 6:
+                case 32512:
                     move_y_axis = 1;
                     break;
-                case 7:
+                case 65280:
                     move_y_axis = 1;
                     move_x_axis = 1;
                     break;
